@@ -6,10 +6,10 @@
 3. Data Lineage
 4. Observability
 5. Pipelines must have at least 2 pipelines:
-   a. Top Sales per City
-   b. Top Salesman in the whole country
+  - Top Sales per City
+  - Top Salesman in the whole country
 6. The final Aggregated results mut be in a dedicated DB and API
 7. Restrictions:
-   a. Python
-   b. Red-Shift
-   c. Hadoop
+  - Python
+  - Red-Shift
+  - Hadoop
