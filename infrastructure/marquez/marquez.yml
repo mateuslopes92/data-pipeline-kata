@@ -1,0 +1,17 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 5000
+
+db:
+  driverClass: org.postgresql.Driver
+  url: jdbc:postgresql://postgres-marquez:5432/marquez
+  user: marquez
+  password: marquez
+  properties:
+    charSet: UTF-8
+
+logging:
+  level: INFO
+  loggers:
+    marquez: INFO
