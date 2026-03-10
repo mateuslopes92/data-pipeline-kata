@@ -13,3 +13,88 @@
   - Python
   - Red-Shift
   - Hadoop
+
+## Design
+![](/design.png)
+
+## Ingestion Data Sources
+
+### Relational DB
+- PostgreSQL
+  - Relational DB Source
+
+- CSV Files
+  - File System Source
+
+- REST API
+  - Traditional Web Service Source
+
+
+## Streaming/Processing
+- Apache Kafka
+  - Event Streaming
+
+- Kafka Streams
+  - Java
+  - Processing
+
+- Why Kafka Streams?
+  - Works well with Java
+  - Lightweight compared to Spark/Flink
+  - Easy to run locally with Docker
+
+## Data Lineage
+- OpenLineage + Marquez
+
+This automatically tracks:
+- Where data came from
+- Which pipeline processed it
+- Where it went
+
+## Observability
+- Prometheus
+  - Collect and Store metrics
+- Grafana
+  - Visualize in dashboards
+
+Metrics from:
+- Kafka
+- Processing Service
+- API
+
+## Storage for Aggregated Data
+- PostgreSQL(separated DB)
+
+Table:
+
+```
+top_sales_per_city
+top_salesman_country
+```
+
+## API
+- NodeJS + Express
+
+Endpoints:
+```
+GET /top-sales/city
+GET /top-sales/salesman
+```
+
+## Infrastructure
+
+Uses Docker Compose so everything runs locally.
+
+Services:
+```
+postgres-source
+postgres-analytics
+kafka
+zookeeper
+kafka-streams-processor
+mock-sales-api
+prometheus
+grafana
+marquez
+node-api
+```
