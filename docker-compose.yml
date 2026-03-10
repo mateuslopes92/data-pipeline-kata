@@ -54,16 +54,15 @@ services:
 
   marquez:
     image: marquezproject/marquez:0.50.0
+    platform: linux/amd64
     container_name: marquez
     depends_on:
       - postgres-marquez
-    environment:
-      MARQUEZ_DB_HOST: postgres-marquez
-      MARQUEZ_DB_USER: marquez
-      MARQUEZ_DB_PASSWORD: marquez
-      MARQUEZ_DB_NAME: marquez
+    volumes:
+      - ./infrastructure/marquez/marquez.yml:/opt/marquez/marquez.yml
+    command: ["server", "/opt/marquez/marquez.yml"]
     ports:
-      - "5000:5000"
+      - "5001:5000"
 
   prometheus:
     image: prom/prometheus
