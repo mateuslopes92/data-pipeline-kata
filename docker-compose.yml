@@ -42,9 +42,10 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
 
-  postgres-marquez:
+  # postgres for marquez
+  postgres:
     image: postgres:14
-    container_name: postgres-marquez
+    container_name: postgres
     environment:
       POSTGRES_DB: marquez
       POSTGRES_USER: marquez
@@ -57,7 +58,7 @@ services:
     platform: linux/amd64
     container_name: marquez
     depends_on:
-      - postgres-marquez
+      - postgres
     volumes:
       - ./infrastructure/marquez/marquez.yml:/opt/marquez/marquez.yml
     command: ["server", "/opt/marquez/marquez.yml"]
