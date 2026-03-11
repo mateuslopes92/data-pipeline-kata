@@ -1,0 +1,162 @@
+[
+  {
+    "id": "1",
+    "city": "New York",
+    "salesman": "Alice",
+    "amount": 200,
+    "source": "db",
+    "timestamp": 1710000001
+  },
+  {
+    "id": "2",
+    "city": "New York",
+    "salesman": "Bob",
+    "amount": 150,
+    "source": "db",
+    "timestamp": 1710000002
+  },
+  {
+    "id": "3",
+    "city": "Chicago",
+    "salesman": "Alice",
+    "amount": 300,
+    "source": "db",
+    "timestamp": 1710000003
+  },
+  {
+    "id": "4",
+    "city": "Chicago",
+    "salesman": "John",
+    "amount": 100,
+    "source": "db",
+    "timestamp": 1710000004
+  },
+  {
+    "id": "5",
+    "city": "Miami",
+    "salesman": "Alice",
+    "amount": 400,
+    "source": "file",
+    "timestamp": 1710000005
+  },
+  {
+    "id": "6",
+    "city": "Miami",
+    "salesman": "Bob",
+    "amount": 50,
+    "source": "file",
+    "timestamp": 1710000006
+  },
+  {
+    "id": "7",
+    "city": "Los Angeles",
+    "salesman": "Carol",
+    "amount": 500,
+    "source": "api",
+    "timestamp": 1710000007
+  },
+  {
+    "id": "8",
+    "city": "Los Angeles",
+    "salesman": "Alice",
+    "amount": 120,
+    "source": "api",
+    "timestamp": 1710000008
+  },
+  {
+    "id": "9",
+    "city": "Dallas",
+    "salesman": "John",
+    "amount": 220,
+    "source": "db",
+    "timestamp": 1710000009
+  },
+  {
+    "id": "10",
+    "city": "Dallas",
+    "salesman": "Bob",
+    "amount": 180,
+    "source": "db",
+    "timestamp": 1710000010
+  },
+  {
+    "id": "11",
+    "city": "Seattle",
+    "salesman": "Carol",
+    "amount": 260,
+    "source": "file",
+    "timestamp": 1710000011
+  },
+  {
+    "id": "12",
+    "city": "Seattle",
+    "salesman": "Alice",
+    "amount": 310,
+    "source": "file",
+    "timestamp": 1710000012
+  },
+  {
+    "id": "13",
+    "city": "Boston",
+    "salesman": "Bob",
+    "amount": 140,
+    "source": "api",
+    "timestamp": 1710000013
+  },
+  {
+    "id": "14",
+    "city": "Boston",
+    "salesman": "John",
+    "amount": 190,
+    "source": "api",
+    "timestamp": 1710000014
+  },
+  {
+    "id": "15",
+    "city": "San Francisco",
+    "salesman": "Carol",
+    "amount": 420,
+    "source": "db",
+    "timestamp": 1710000015
+  },
+  {
+    "id": "16",
+    "city": "San Francisco",
+    "salesman": "Alice",
+    "amount": 330,
+    "source": "db",
+    "timestamp": 1710000016
+  },
+  {
+    "id": "17",
+    "city": "Denver",
+    "salesman": "Bob",
+    "amount": 210,
+    "source": "file",
+    "timestamp": 1710000017
+  },
+  {
+    "id": "18",
+    "city": "Denver",
+    "salesman": "Carol",
+    "amount": 390,
+    "source": "file",
+    "timestamp": 1710000018
+  },
+  {
+    "id": "19",
+    "city": "Atlanta",
+    "salesman": "Alice",
+    "amount": 275,
+    "source": "api",
+    "timestamp": 1710000019
+  },
+  {
+    "id": "20",
+    "city": "Atlanta",
+    "salesman": "John",
+    "amount": 160,
+    "source": "api",
+    "timestamp": 1710000020
+  }
+]
