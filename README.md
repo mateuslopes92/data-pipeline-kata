@@ -38,6 +38,23 @@
 
 - REST API
   - Traditional Web Service Source
+  - to build and run `mvn compile` and `mvn exec:java -Dexec.mainClass="com.pipeline.ApiIngestionApp"` inside of api-ingestion
+  - to send to kafka with request `curl -X POST http://localhost:8080/sales \
+-H "Content-Type: application/json" \
+-d '{"id":"501","city":"Chicago","salesman":"Bob","amount":900}'` in other terminal
+  - to verify on kafka `docker exec -it kafka kafka-console-consumer \
+--bootstrap-server localhost:9092 \
+--topic sales-api \
+--from-beginning`
+
+With this all ingestion layer is done:
+```
+Postgres DB ──────► sales-db topic
+
+JSON File ────────► sales-file topic
+
+REST API ────────► sales-api topic
+```
 
 
 ## Streaming/Processing
