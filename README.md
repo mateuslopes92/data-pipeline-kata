@@ -22,9 +22,19 @@
 ### Relational DB
 - PostgreSQL
   - Relational DB Source
+  - to build and run `mvn compile` and `mvn exec:java -Dexec.mainClass="com.pipeline.DbIngestionApp"` inside of db-ingestion
+  - to verify on kafka `docker exec -it kafka kafka-console-consumer \
+--bootstrap-server localhost:9092 \
+--topic sales-db \
+--from-beginning`
 
 - CSV Files
   - File System Source
+  - to build and run `mvn compile` and `mvn exec:java -Dexec.mainClass="com.pipeline.FileIngestionApp"` inside of file-ingestion
+  - to verify on kafka `docker exec -it kafka kafka-console-consumer \
+--bootstrap-server localhost:9092 \
+--topic sales-file \
+--from-beginning`
 
 - REST API
   - Traditional Web Service Source
