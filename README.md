@@ -28,7 +28,7 @@
 --topic sales-db \
 --from-beginning`
 
-- CSV Files
+- JSON Files
   - File System Source
   - to build and run `mvn compile` and `mvn exec:java -Dexec.mainClass="com.pipeline.FileIngestionApp"` inside of file-ingestion
   - to verify on kafka `docker exec -it kafka kafka-console-consumer \
