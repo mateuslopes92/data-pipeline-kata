@@ -59,7 +59,12 @@ REST API ────────► sales-api topic
 
 ## Streaming/Processing
 - Apache Kafka
-  - Event Streaming
+  - Event Streaming (processing/stream-processing)
+  - to build and run `mvn compile` and `mvn exec:java -Dexec.mainClass="com.pipeline.StreamProcessingApp"` inside of processing/stream-processing
+  - To check the kafka topic `docker exec -it kafka kafka-console-consumer \
+--bootstrap-server localhost:9092 \
+--topic sales-processed \
+--from-beginning`
 
 - Kafka Streams
   - Java
