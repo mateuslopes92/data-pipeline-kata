@@ -10,8 +10,6 @@ public class FileIngestionApp {
 
     public static void main(String[] args) throws Exception {
 
-        String filePath = "../../data/sales-event.json";
-
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -19,16 +17,18 @@ public class FileIngestionApp {
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
-        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+        BufferedReader reader = new BufferedReader(
+                new FileReader("data/sales-event.ndjson")
+        );
 
         String line;
 
         while ((line = reader.readLine()) != null) {
 
-            ProducerRecord<String, String> record =
-                    new ProducerRecord<>("sales-file", null, line);
-
-            producer.send(record);
+            producer.send(new ProducerRecord<>(
+                    "sales-file",
+                    line
+            ));
 
             System.out.println("Sent: " + line);
         }
