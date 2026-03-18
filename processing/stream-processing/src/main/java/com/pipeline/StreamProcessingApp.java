@@ -6,9 +6,20 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.*;
 import org.apache.kafka.streams.kstream.*;
 
+import org.apache.kafka.streams.state.*;
+import org.apache.kafka.streams.StoreQueryParameters;
+
 import java.util.Properties;
 
+import static spark.Spark.*;
+
 public class StreamProcessingApp {
+
+    private static KafkaStreams streams;
+
+    public static KafkaStreams getStreams() {
+        return streams;
+    }
 
     public static void main(String[] args) {
 
@@ -46,7 +57,10 @@ public class StreamProcessingApp {
                             }
                         })
                         .groupByKey(Grouped.with(Serdes.String(), Serdes.Integer()))
-                        .reduce(Integer::sum);
+                        .reduce(
+                                Integer::sum,
+                                Materialized.as("sales-by-city-store")
+                        );
 
                         salesByCity
                         .toStream()
@@ -56,9 +70,42 @@ public class StreamProcessingApp {
                         .mapValues(total -> String.valueOf(total))
                         .to("sales-by-city", Produced.with(Serdes.String(), Serdes.String()));
 
-        KafkaStreams streams = new KafkaStreams(builder.build(), props);
+        streams = new KafkaStreams(builder.build(), props);
 
         streams.start();
+
+        port(8081);
+
+        get("/sales/:city", (req, res) -> {
+
+            String city = req.params(":city");
+
+            ReadOnlyKeyValueStore<String, Integer> store;
+
+            while (true) {
+                try {
+                    store = streams.store(
+                        StoreQueryParameters.fromNameAndType(
+                            "sales-by-city-store",
+                            QueryableStoreTypes.keyValueStore()
+                        )
+                    );
+                    break;
+                } catch (Exception e) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+
+            Integer result = store.get(city);
+
+            res.type("application/json");
+
+            return "{ \"city\": \"" + city + "\", \"total\": " + (result != null ? result : 0) + " }";
+        });
 
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
