@@ -5,6 +5,7 @@ import org.apache.kafka.clients.producer.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Properties;
+import java.io.InputStreamReader;
 
 public class FileIngestionApp {
 
@@ -18,7 +19,11 @@ public class FileIngestionApp {
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
         BufferedReader reader = new BufferedReader(
-                new FileReader("data/sales-event.ndjson")
+            new InputStreamReader(
+                FileIngestionApp.class
+                    .getClassLoader()
+                    .getResourceAsStream("sales-event.ndjson")
+            )
         );
 
         String line;
