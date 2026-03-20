@@ -1,5 +1,7 @@
 package com.pipeline;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.producer.*;
 
 import java.util.Properties;
@@ -10,27 +12,55 @@ public class ApiIngestionApp {
 
     public static void main(String[] args) {
 
-        port(8080);
+        port(8082);
+        init();
 
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
+        props.put(
+            "bootstrap.servers",
+            System.getenv().getOrDefault("KAFKA_BOOTSTRAP", "localhost:9092")
+        );
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("acks", "all");
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
+        ObjectMapper mapper = new ObjectMapper();
+
         post("/sales", (req, res) -> {
 
-            String event = req.body();
+            try {
+                String event = req.body();
 
-            ProducerRecord<String, String> record =
-                    new ProducerRecord<>("sales-api", null, event);
+                // Parse JSON
+                JsonNode node = mapper.readTree(event);
 
-            producer.send(record);
+                // Extract city as key
+                String key = node.has("city") ? node.get("city").asText() : "unknown";
 
-            System.out.println("Received and sent to Kafka: " + event);
+                ProducerRecord<String, String> record =
+                        new ProducerRecord<>("sales-api", key, event);
 
-            return "Event sent to Kafka!";
+                producer.send(record, (metadata, exception) -> {
+                    if (exception != null) {
+                        exception.printStackTrace();
+                    }
+                });
+
+                System.out.println("Received and sent to Kafka: " + event);
+
+                res.status(200);
+                return "Event sent to Kafka!";
+
+            } catch (Exception e) {
+                res.status(400);
+                return "Invalid JSON";
+            }
         });
+
+        awaitInitialization();
+
+        System.out.println("API Ingestion Service is running on port 8082...");
     }
 }
