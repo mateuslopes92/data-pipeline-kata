@@ -29,27 +29,39 @@ public class FileIngestionApp {
             )
         );
 
+        StringBuilder jsonBuilder = new StringBuilder();
         String line;
 
         while ((line = reader.readLine()) != null) {
 
-            String key = "unknown";
+            jsonBuilder.append(line.trim());
 
-            try {
-                int cityStart = line.indexOf("\"city\":\"") + 8;
-                int cityEnd = line.indexOf("\"", cityStart);
-                key = line.substring(cityStart, cityEnd);
-            } catch (Exception e) {
-                // fallback stays "unknown"
+            // Detect end of JSON object
+            if (line.trim().endsWith("}")) {
+
+                String json = jsonBuilder.toString();
+
+                String key = "unknown";
+
+                try {
+                    int cityStart = json.indexOf("\"city\":\"") + 8;
+                    int cityEnd = json.indexOf("\"", cityStart);
+                    key = json.substring(cityStart, cityEnd);
+                } catch (Exception e) {
+                    // fallback stays "unknown"
+                }
+
+                producer.send(new ProducerRecord<>(
+                        "sales-file",
+                        key,
+                        json
+                ));
+
+                System.out.println("Sent: " + json);
+
+                // Reset for next JSON object
+                jsonBuilder.setLength(0);
             }
-
-            producer.send(new ProducerRecord<>(
-                    "sales-file",
-                    key,
-                    line
-            ));
-
-            System.out.println("Sent: " + line);
         }
 
         reader.close();
