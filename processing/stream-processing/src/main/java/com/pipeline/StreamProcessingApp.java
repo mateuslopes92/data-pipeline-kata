@@ -25,7 +25,10 @@ public class StreamProcessingApp {
 
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "sales-processing");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(
+            StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,
+            System.getenv().getOrDefault("KAFKA_BOOTSTRAP", "localhost:9092")
+        );
 
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
@@ -105,6 +108,59 @@ public class StreamProcessingApp {
             res.type("application/json");
 
             return "{ \"city\": \"" + city + "\", \"total\": " + (result != null ? result : 0) + " }";
+        });
+
+        get("/sales", (req, res) -> {
+
+            ReadOnlyKeyValueStore<String, Integer> store;
+
+            while (true) {
+                try {
+                    store = streams.store(
+                        StoreQueryParameters.fromNameAndType(
+                            "sales-by-city-store",
+                            QueryableStoreTypes.keyValueStore()
+                        )
+                    );
+                    break;
+                } catch (Exception e) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+
+            res.type("application/json");
+
+            StringBuilder json = new StringBuilder();
+            json.append("[");
+
+            try (KeyValueIterator<String, Integer> all = store.all()) {
+
+                boolean first = true;
+
+                while (all.hasNext()) {
+                    KeyValue<String, Integer> kv = all.next();
+
+                    if (!first) {
+                        json.append(",");
+                    }
+
+                    json.append("{ \"city\": \"")
+                        .append(kv.key)
+                        .append("\", \"total\": ")
+                        .append(kv.value)
+                        .append("}");
+
+                    first = false;
+                }
+            }
+
+            json.append("]");
+
+            return json.toString();
         });
 
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
