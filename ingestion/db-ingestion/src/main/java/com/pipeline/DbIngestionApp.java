@@ -22,7 +22,10 @@ public class DbIngestionApp {
         ResultSet rs = statement.executeQuery();
 
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
+        props.put(
+            "bootstrap.servers",
+            System.getenv().getOrDefault("KAFKA_BOOTSTRAP", "localhost:9092")
+        );
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
@@ -43,7 +46,7 @@ public class DbIngestionApp {
             String json = mapper.writeValueAsString(event);
 
             ProducerRecord<String, String> record =
-                    new ProducerRecord<>("sales-db", event.id, json);
+                    new ProducerRecord<>("sales-db", event.city, json);
 
             producer.send(record);
 
